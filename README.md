@@ -11,70 +11,136 @@ TODO: Update this about section with a brief introduction/summary about this rep
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
+> **[v1.0.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`v1.0.0`&nbsp;&nbsp;•&nbsp;&nbsp;29 patches total
+<details open>
+<summary>📦 Meetup&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
+<br>
 
-<!-- Do not modify this section by hand. The patch list is generated when release.yml creates a new release.
-     
-     If you wish for the patches list to be collapsed, then remove the word 'EXPANDED' from the comment tag above.
+**🎯 Supported versions:**
 
-     If you wish to manually keep this list updated then remove the PATCHES_START and PATCHES_END 
-     comment blocks entirely. -->
+| 2026.04.10.2881 |
+| :---: |
 
-#### A list of your patches will automatically be shown here after your first patches release is created.
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Auto-reject cookie banner](#auto-reject-cookie-banner) | Programmatically persists a 'Banner - Reject All' decision through OneTrust and suppresses the consent banner, so the user is never prompted and non-essential tracking is rejected on every launch. |  |
+| [Disable Meetup+ trial panels](#disable-meetup-trial-panels) | Removes the 'Try Meetup+ free for 7 days' banner composable from every screen that embeds it. |  |
+| [Disable MemberSub paywalls](#disable-membersub-paywalls) | Closes the Compose-era Meetup+ paywall activities (MemberSubActivity and MemberSubWebViewActivity) before they render, blocking the popups that profile views, message composition, and other upsells now route through. |  |
+| [Disable intro paywall](#disable-intro-paywall) | Suppresses the Meetup+ intro paywall that pops up on fresh login. |  |
+| [Disable profile paywall](#disable-profile-paywall) | Stops the Meetup+ subscription popup from appearing when tapping a member's name or 'See full profile'. |  |
+| [Disable step-up paywalls](#disable-step-up-paywalls) | Closes the Meetup+ step-up paywall Activity before it renders, blocking every popup that routes through it (RSVP, messaging, attendees, waitlist, group members, profile). |  |
+| [Hide attendees paywall panels](#hide-attendees-paywall-panels) | Hides the 'Learn more about attendees / Unlock full details' teaser on event pages and the 'Learn more about who will be there. Try for free.' banner on the Attendees list. |  |
+| [Inject Google Maps API key](#inject-google-maps-api-key) | Replaces the manifest's com.google.android.maps.v2.API_KEY with a user-supplied key. REQUIRED for Maps to render on sideloaded builds — Meetup's production key is cert-fingerprint-locked and rejects requests from any re-signed APK. | • mapsKey |
+| [Unblur profile content](#unblur-profile-content) | Disables the Compose blur overlay Meetup applies to gated profile fields, group lists, and member rows so the underlying data is visible. |  |
 
-&nbsp;
+</details>
 
-## 🚀 Get started
+<details open>
+<summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
+<br>
 
-To start using this template, follow these steps:
+**🎯 Supported versions:**
 
-1. [Setup](https://github.com/MorpheApp/morphe-documentation/blob/main/docs/morphe-development/README.md) your development environment including adding a GitHub PAT as described [here](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/2_1_setup.md#-prepare-the-environment).
-2. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=MorpheApp). Select create a new repository, and **enable 'Include all branches'** 
-3. Enable "Allow GitHub Actions to create and approve pull requests" in your repo Settings > Actions > General > Workflow permissions
-4. Update the [build.gradle.kts](patches/build.gradle.kts) file (Specifically, the 
-   [group of the project](patches/build.gradle.kts#L1), and the [About](patches/build.gradle.kts#L6-L11))
-5. Update the [README.md](README.md) file to be specific of your repo, and update the links in the [issue templates](.github/ISSUE_TEMPLATE).
-6. Choose a name for your patches project. Keep in mind you must use a name that does not 
-   imply authorship by the Morphe open source project. If unsure, then simply name these
-   patches after yourself ("UserXYZ Morphe patches"). See the [NOTICE](NOTICE) for details. 
-7. (Optional): Add `patches-bundle.png` to the project if you want a custom icon to show in
-   Morphe Manager instead of your GitHub profile avatar.
+| 🧪&nbsp;12.4.1-release.0 |
+| :---: |
 
-🎉 You are now ready to start creating patches!
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Bypass PairIP integrity](#bypass-pairip-integrity) | Severs PairIP's startup path (attachBaseContext short-circuits to super; verifyIntegrity and StartupLauncher.launch no-op) so a re-signed APK does not hit the libpairipcore SIGSEGV. Does not defeat server-side Play Integrity login attestation. |  |
+| [Disable sensitive-media content-warning blur](#disable-sensitive-media-content-warning-blur) | Forces the timeline sensitive-media interstitial decision to false so downloaded media renders without the "content warning" blur overlay. RE artifact for X 12.4.1, which is native-PairIP-wrapped and not sideload-patchable unrooted — default-off. |  |
+| [Remove promoted timeline items](#remove-promoted-timeline-items) | Drops promoted (ad / "Sponsored") posts, event summaries, and trends from every timeline before they are rendered. RE artifact for X 12.4.1, which is native-PairIP-wrapped and not sideload-patchable unrooted — default-off. |  |
 
-## 🧑‍💻 Usage
+</details>
 
-To develop and release your Patches using this template:
+<details open>
+<summary>📦 FolderSync&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
 
-- Do all development work in the `dev` branch.
-- For local development work build your patches using the gradle task `./gradlew buildAndroid` to generate the mpp file found in `patches/build/libs/patches-*.mpp`. Apply your patches locally using Morphe CLI tool like any other patch bundle.
-- Always use [Semantic commit](https://kapeli.com/cheat_sheets/Semantic_Commits.docset/Contents/Resources/Documents/index) messages for commits. To keep it simple use only 3 commit message types: `feat: Added a new feature`, `fix: Some problem now fixed`, `chore: Random change you do not want in the user facing changelog`
-- Commits of `fix:` and `feat:` will automatically generate new pre-releases and `chore:` will not create a new release.
-- Users can apply your dev branch releases by enabling `pre-release` in Morphe Manager patch sources.
-- When your dev branch is ready and you want a stable release, merge dev branch to main (do not squash, and only merge).
-- **Always use semantic release (release.yml)**. Do not manually upload or creating releases by hand because many files must be updated and release.yml handles everything.
+**🎯 Supported versions:**
 
-## 🤓 Tips
-- See the [patcher documentation](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/1_patcher_intro.md)
-  for more examples of creating patches and fingerprints.
-- Do not manually edit any generated files such as: `patches-list.json`, `patches-bundle.json`, `CHANGELOG.md`.
-  These files will be automatically updated in the release action.
-- Do not force push any semantic release commits or you will break the release. To 'redo' the last release then:
-  - Git drop the last dev/main semantic release commit you want to redo.
-  - Delete the release from the release area of this repo and delete the tag   
-  - Make any other changes you wish to do
-  - Force push dev/main branch
-  - A new replacement release will be created by `release.yml`
+| 4.8.5 |
+| :---: |
 
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable AdMob banners](#disable-admob-banners) | Turns the AppAdmobBannerLoader composable into a no-op so the lite-version banner ad never renders. |  |
+| [Disable AdMob interstitials](#disable-admob-interstitials) | Neutralises the synthetic Runnable that loads and shows AdMob interstitial ads on navigation events. |  |
 
-<!-- The patches end tag is intentionally placed here so the first release will cleanup 
-     this readme of all developer instructions above. -->
+</details>
+
+<details open>
+<summary>📦 Tinder&nbsp;&nbsp;•&nbsp;&nbsp;10 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 17.15.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable Boost upsell](#disable-boost-upsell) | Suppresses the standard Boost upsell popup ("Get Tinder Plus / Gold / Platinum" prompt that surfaces when out of Boosts). |  |
+| [Disable MyLikes upsell](#disable-mylikes-upsell) | Suppresses the "You've liked amazing people" Tinder Platinum popup on the Likes Sent tab. |  |
+| [Disable Platinum Likes upsell](#disable-platinum-likes-upsell) | Suppresses the "Be Seen Faster / Upgrade Likes" Tinder Platinum popup. |  |
+| [Disable Primetime Boost upsell](#disable-primetime-boost-upsell) | Suppresses the Primetime Boost upsell popup. |  |
+| [Disable Secret Admirer upsell](#disable-secret-admirer-upsell) | Suppresses the Secret Admirer (Gold) upsell popup. |  |
+| [Disable ads-bouncer rewarded-video paywall](#disable-ads-bouncer-rewarded-video-paywall) | Suppresses the "Watch an ad to keep swiping" rewarded-video bottom sheet shown when out of likes. |  |
+| [Disable dynamic paywall sheet](#disable-dynamic-paywall-sheet) | Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts. |  |
+| [Disable headless purchase upsell](#disable-headless-purchase-upsell) | Suppresses the headless-purchase confirmation upsell popup. |  |
+| [Disable paywall flow](#disable-paywall-flow) | Short-circuits the central LaunchPaywallFlow entry. Suppresses every paywall routed through paywallflow but also disables legitimate purchase flows. |  |
+| [Disable rewarded-video modal](#disable-rewarded-video-modal) | Suppresses the standalone rewarded-video bottom sheet (e.g. "watch an ad to get a Rewind"). |  |
+
+</details>
+
+<details open>
+<summary>📦 Hidrate Spark&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 4.6.9 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable license check](#disable-license-check) | Bypasses the Google Play license verification that blocks sideloaded installs. |  |
+| [Disable payment check](#disable-payment-check) | Bypasses the premium subscription check so all features are unlocked. |  |
+
+</details>
+
+<details open>
+<summary>📦 Met Office&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 3.40.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Hide ad containers](#hide-ad-containers) | Collapses every AdMob BannerAd slot to zero pixels. Pair with 'Remove ads' to also strip the empty Met Office-branded strip the homepage banner slot leaves behind. |  |
+| [Remove ads](#remove-ads) | Stops banner, interstitial, rewarded, and app-open ads from loading by no-opping the react-native-google-mobile-ads native bridge entry points. |  |
+
+</details>
+
+<details open>
+<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable PairIP license check](#disable-pairip-license-check) | Universally bypasses Google Play PairIP's license verification (the Play-ownership gate that blocks sideloaded installs). Applies to any PairIP-licensed app; does not defeat PairIP's native VM/integrity layer. |  |
+
+</details>
+
 <!-- PATCHES_END -->
 
 #### How to use these patches
 
-Click here to add these patches to Morphe: https://morphe.software/add-source?github=xyz-user/xyz-patches
+Click here to add these patches to Morphe: https://morphe.software/add-source?github=Kirby1997/morphe-patches
 
-Or manually add this repository url as a patch source in Morphe: https://github.com/xyz-user/xyz-patches
+Or manually add this repository url as a patch source in Morphe: https://github.com/Kirby1997/morphe-patches
 
 ### 🛠️ Building
 
