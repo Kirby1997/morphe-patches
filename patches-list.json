@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "patches": [
     {
       "name": "Auto-reject cookie banner",
@@ -109,6 +109,32 @@
     {
       "name": "Disable Boost upsell",
       "description": "Suppresses the standard Boost upsell popup (\"Get Tinder Plus / Gold / Platinum\" prompt that surfaces when out of Boosts).",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.tinder",
+          "name": "Tinder",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#FD5564",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "17.15.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable Likes You Gold upsell modal",
+      "description": "Stops the \"pick one of the people who liked you\" Gold Home teaser from appearing, which also removes the crash that happened when selecting a face launched the Gold paywall.",
       "default": true,
       "dependencies": [],
       "compatiblePackages": [
@@ -323,6 +349,32 @@
       "options": []
     },
     {
+      "name": "Disable curated swipe-stack ads",
+      "description": "Stops Tinder inserting sponsored ad cards into curated card stacks (AdCuratedCardStackInjector.shouldInsertAdRec -> false).",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.tinder",
+          "name": "Tinder",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#FD5564",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "17.15.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Disable dynamic paywall sheet",
       "description": "Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts.",
       "default": false,
@@ -416,6 +468,32 @@
           "targets": [
             {
               "version": "4.6.9",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable main swipe-stack ads",
+      "description": "Stops Tinder inserting sponsored ad cards into the main swipe rec-stack (AdMainCardStackInjector.shouldInsertAdRec -> false).",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.tinder",
+          "name": "Tinder",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#FD5564",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "17.15.0",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -559,6 +637,32 @@
     {
       "name": "Disable step-up paywalls",
       "description": "Closes the Meetup+ step-up paywall Activity before it renders, blocking every popup that routes through it (RSVP, messaging, attendees, waitlist, group members, profile).",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.meetup",
+          "name": "Meetup",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#ED1C40",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2026.04.10.2881",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable unprompted paywalls",
+      "description": "Forces AppSettings.getShouldShowUnpromptedPaywall / getShouldShowEventUnpromptedPaywall to false so Meetup+ paywalls do not pop up on their own.",
       "default": true,
       "dependencies": [],
       "compatiblePackages": [
