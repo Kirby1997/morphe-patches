@@ -1,31 +1,13 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "patches": [
     {
-      "name": "Auto-reject cookie banner",
-      "description": "Programmatically persists a 'Banner - Reject All' decision through OneTrust and suppresses the consent banner, so the user is never prompted and non-essential tracking is rejected on every launch.",
+      "name": "Auto-reject OneTrust consent banner",
+      "description": "Universally suppresses the OneTrust cookie/TCF consent banner in any app that bundles OneTrust. Persists a real 'Banner - Reject All' decision so non-essential tracking is rejected, and no-ops the setupUI render path so the banner never appears on any launch.",
       "default": true,
       "dependencies": [],
-      "compatiblePackages": [
-        {
-          "packageName": "com.meetup",
-          "name": "Meetup",
-          "description": null,
-          "apkFileType": "APK",
-          "appIconColor": "#ED1C40",
-          "signatures": null,
-          "targets": [
-            {
-              "version": "2026.04.10.2881",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
+      "compatiblePackages": null,
       "options": []
     },
     {
@@ -325,6 +307,32 @@
     {
       "name": "Disable ads-bouncer rewarded-video paywall",
       "description": "Suppresses the \"Watch an ad to keep swiping\" rewarded-video bottom sheet shown when out of likes.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.tinder",
+          "name": "Tinder",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#FD5564",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "17.15.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable consent prompt",
+      "description": "Suppresses Tinder's in-house TCF consent popup (\"Privacy preference centre\") by taking CmpLifecycleObserver's existing no-prompt branch unconditionally. No consent is granted, so non-essential tracking stays unpermitted and the popup never appears.",
       "default": true,
       "dependencies": [],
       "compatiblePackages": [

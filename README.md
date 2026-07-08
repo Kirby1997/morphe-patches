@@ -11,30 +11,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`v1.0.0`&nbsp;&nbsp;•&nbsp;&nbsp;29 patches total
-<details open>
-<summary>📦 Meetup&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
-<br>
-
-**🎯 Supported versions:**
-
-| 2026.04.10.2881 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Auto-reject cookie banner](#auto-reject-cookie-banner) | Programmatically persists a 'Banner - Reject All' decision through OneTrust and suppresses the consent banner, so the user is never prompted and non-essential tracking is rejected on every launch. |  |
-| [Disable Meetup+ trial panels](#disable-meetup-trial-panels) | Removes the 'Try Meetup+ free for 7 days' banner composable from every screen that embeds it. |  |
-| [Disable MemberSub paywalls](#disable-membersub-paywalls) | Closes the Compose-era Meetup+ paywall activities (MemberSubActivity and MemberSubWebViewActivity) before they render, blocking the popups that profile views, message composition, and other upsells now route through. |  |
-| [Disable intro paywall](#disable-intro-paywall) | Suppresses the Meetup+ intro paywall that pops up on fresh login. |  |
-| [Disable profile paywall](#disable-profile-paywall) | Stops the Meetup+ subscription popup from appearing when tapping a member's name or 'See full profile'. |  |
-| [Disable step-up paywalls](#disable-step-up-paywalls) | Closes the Meetup+ step-up paywall Activity before it renders, blocking every popup that routes through it (RSVP, messaging, attendees, waitlist, group members, profile). |  |
-| [Hide attendees paywall panels](#hide-attendees-paywall-panels) | Hides the 'Learn more about attendees / Unlock full details' teaser on event pages and the 'Learn more about who will be there. Try for free.' banner on the Attendees list. |  |
-| [Inject Google Maps API key](#inject-google-maps-api-key) | Replaces the manifest's com.google.android.maps.v2.API_KEY with a user-supplied key. REQUIRED for Maps to render on sideloaded builds — Meetup's production key is cert-fingerprint-locked and rejects requests from any re-signed APK. | • mapsKey |
-| [Unblur profile content](#unblur-profile-content) | Disables the Compose blur overlay Meetup applies to gated profile fields, group lists, and member rows so the underlying data is visible. |  |
-
-</details>
-
+> **[v1.0.2](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;34 patches total
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
@@ -69,7 +46,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 </details>
 
 <details open>
-<summary>📦 Tinder&nbsp;&nbsp;•&nbsp;&nbsp;10 patches</summary>
+<summary>📦 Tinder&nbsp;&nbsp;•&nbsp;&nbsp;14 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -80,15 +57,42 @@ TODO: Update this about section with a brief introduction/summary about this rep
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Disable Boost upsell](#disable-boost-upsell) | Suppresses the standard Boost upsell popup ("Get Tinder Plus / Gold / Platinum" prompt that surfaces when out of Boosts). |  |
+| [Disable Likes You Gold upsell modal](#disable-likes-you-gold-upsell-modal) | Stops the "pick one of the people who liked you" Gold Home teaser from appearing, which also removes the crash that happened when selecting a face launched the Gold paywall. |  |
 | [Disable MyLikes upsell](#disable-mylikes-upsell) | Suppresses the "You've liked amazing people" Tinder Platinum popup on the Likes Sent tab. |  |
 | [Disable Platinum Likes upsell](#disable-platinum-likes-upsell) | Suppresses the "Be Seen Faster / Upgrade Likes" Tinder Platinum popup. |  |
 | [Disable Primetime Boost upsell](#disable-primetime-boost-upsell) | Suppresses the Primetime Boost upsell popup. |  |
 | [Disable Secret Admirer upsell](#disable-secret-admirer-upsell) | Suppresses the Secret Admirer (Gold) upsell popup. |  |
 | [Disable ads-bouncer rewarded-video paywall](#disable-ads-bouncer-rewarded-video-paywall) | Suppresses the "Watch an ad to keep swiping" rewarded-video bottom sheet shown when out of likes. |  |
+| [Disable consent prompt](#disable-consent-prompt) | Suppresses Tinder's in-house TCF consent popup ("Privacy preference centre") by taking CmpLifecycleObserver's existing no-prompt branch unconditionally. No consent is granted, so non-essential tracking stays unpermitted and the popup never appears. |  |
+| [Disable curated swipe-stack ads](#disable-curated-swipe-stack-ads) | Stops Tinder inserting sponsored ad cards into curated card stacks (AdCuratedCardStackInjector.shouldInsertAdRec -> false). |  |
 | [Disable dynamic paywall sheet](#disable-dynamic-paywall-sheet) | Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts. |  |
 | [Disable headless purchase upsell](#disable-headless-purchase-upsell) | Suppresses the headless-purchase confirmation upsell popup. |  |
+| [Disable main swipe-stack ads](#disable-main-swipe-stack-ads) | Stops Tinder inserting sponsored ad cards into the main swipe rec-stack (AdMainCardStackInjector.shouldInsertAdRec -> false). |  |
 | [Disable paywall flow](#disable-paywall-flow) | Short-circuits the central LaunchPaywallFlow entry. Suppresses every paywall routed through paywallflow but also disables legitimate purchase flows. |  |
 | [Disable rewarded-video modal](#disable-rewarded-video-modal) | Suppresses the standalone rewarded-video bottom sheet (e.g. "watch an ad to get a Rewind"). |  |
+
+</details>
+
+<details open>
+<summary>📦 Meetup&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 2026.04.10.2881 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Disable Meetup+ trial panels](#disable-meetup-trial-panels) | Removes the 'Try Meetup+ free for 7 days' banner composable from every screen that embeds it. |  |
+| [Disable MemberSub paywalls](#disable-membersub-paywalls) | Closes the Compose-era Meetup+ paywall activities (MemberSubActivity and MemberSubWebViewActivity) before they render, blocking the popups that profile views, message composition, and other upsells now route through. |  |
+| [Disable intro paywall](#disable-intro-paywall) | Suppresses the Meetup+ intro paywall that pops up on fresh login. |  |
+| [Disable profile paywall](#disable-profile-paywall) | Stops the Meetup+ subscription popup from appearing when tapping a member's name or 'See full profile'. |  |
+| [Disable step-up paywalls](#disable-step-up-paywalls) | Closes the Meetup+ step-up paywall Activity before it renders, blocking every popup that routes through it (RSVP, messaging, attendees, waitlist, group members, profile). |  |
+| [Disable unprompted paywalls](#disable-unprompted-paywalls) | Forces AppSettings.getShouldShowUnpromptedPaywall / getShouldShowEventUnpromptedPaywall to false so Meetup+ paywalls do not pop up on their own. |  |
+| [Hide attendees paywall panels](#hide-attendees-paywall-panels) | Hides the 'Learn more about attendees / Unlock full details' teaser on event pages and the 'Learn more about who will be there. Try for free.' banner on the Attendees list. |  |
+| [Inject Google Maps API key](#inject-google-maps-api-key) | Replaces the manifest's com.google.android.maps.v2.API_KEY with a user-supplied key. REQUIRED for Maps to render on sideloaded builds — Meetup's production key is cert-fingerprint-locked and rejects requests from any re-signed APK. | • mapsKey |
+| [Unblur profile content](#unblur-profile-content) | Disables the Compose blur overlay Meetup applies to gated profile fields, group lists, and member rows so the underlying data is visible. |  |
 
 </details>
 
@@ -125,11 +129,12 @@ TODO: Update this about section with a brief introduction/summary about this rep
 </details>
 
 <details open>
-<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
+| [Auto-reject OneTrust consent banner](#auto-reject-onetrust-consent-banner) | Universally suppresses the OneTrust cookie/TCF consent banner in any app that bundles OneTrust. Persists a real 'Banner - Reject All' decision so non-essential tracking is rejected, and no-ops the setupUI render path so the banner never appears on any launch. |  |
 | [Disable PairIP license check](#disable-pairip-license-check) | Universally bypasses Google Play PairIP's license verification (the Play-ownership gate that blocks sideloaded installs). Applies to any PairIP-licensed app; does not defeat PairIP's native VM/integrity layer. |  |
 
 </details>
