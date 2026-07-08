@@ -11,7 +11,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.2](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;34 patches total
+> **[v1.0.3](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;37 patches total
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
@@ -46,7 +46,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 </details>
 
 <details open>
-<summary>📦 Tinder&nbsp;&nbsp;•&nbsp;&nbsp;14 patches</summary>
+<summary>📦 Tinder&nbsp;&nbsp;•&nbsp;&nbsp;15 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -63,6 +63,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 | [Disable Primetime Boost upsell](#disable-primetime-boost-upsell) | Suppresses the Primetime Boost upsell popup. |  |
 | [Disable Secret Admirer upsell](#disable-secret-admirer-upsell) | Suppresses the Secret Admirer (Gold) upsell popup. |  |
 | [Disable ads-bouncer rewarded-video paywall](#disable-ads-bouncer-rewarded-video-paywall) | Suppresses the "Watch an ad to keep swiping" rewarded-video bottom sheet shown when out of likes. |  |
+| [Disable all Tinder paywalls & ads](#disable-all-tinder-paywalls-ads) | Single toggle that applies every safe Tinder ad/upsell patch at once (Boost, MyLikes, Platinum Likes, Primetime, Secret Admirer, headless purchase, Likes You Gold, rewarded video, ads-bouncer paywall, and both swipe-stack ad injectors). Default-off: enable this on its own instead of the individual patches, not alongside them. Excludes the purchase-breaking generic paywall patches. |  |
 | [Disable consent prompt](#disable-consent-prompt) | Suppresses Tinder's in-house TCF consent popup ("Privacy preference centre") by taking CmpLifecycleObserver's existing no-prompt branch unconditionally. No consent is granted, so non-essential tracking stays unpermitted and the popup never appears. |  |
 | [Disable curated swipe-stack ads](#disable-curated-swipe-stack-ads) | Stops Tinder inserting sponsored ad cards into curated card stacks (AdCuratedCardStackInjector.shouldInsertAdRec -> false). |  |
 | [Disable dynamic paywall sheet](#disable-dynamic-paywall-sheet) | Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts. |  |
@@ -74,7 +75,7 @@ TODO: Update this about section with a brief introduction/summary about this rep
 </details>
 
 <details open>
-<summary>📦 Meetup&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
+<summary>📦 Meetup&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -86,6 +87,8 @@ TODO: Update this about section with a brief introduction/summary about this rep
 |----------|----------------|-----------|
 | [Disable Meetup+ trial panels](#disable-meetup-trial-panels) | Removes the 'Try Meetup+ free for 7 days' banner composable from every screen that embeds it. |  |
 | [Disable MemberSub paywalls](#disable-membersub-paywalls) | Closes the Compose-era Meetup+ paywall activities (MemberSubActivity and MemberSubWebViewActivity) before they render, blocking the popups that profile views, message composition, and other upsells now route through. |  |
+| [Disable Rokt partner offers](#disable-rokt-partner-offers) | Removes the 'Powered by Rokt' third-party offer popups (e.g. the post-signup Disney+ interstitial) by no-oping the mParticle RoktKit.execute funnel so no Rokt placement renders. |  |
+| [Disable all Meetup paywalls](#disable-all-meetup-paywalls) | Single toggle that applies every Meetup+ paywall patch at once (intro, step-up, MemberSub, profile, trial panels, unprompted, and attendees paywall panels). Default-off: enable this on its own instead of the individual patches, not alongside them. |  |
 | [Disable intro paywall](#disable-intro-paywall) | Suppresses the Meetup+ intro paywall that pops up on fresh login. |  |
 | [Disable profile paywall](#disable-profile-paywall) | Stops the Meetup+ subscription popup from appearing when tapping a member's name or 'See full profile'. |  |
 | [Disable step-up paywalls](#disable-step-up-paywalls) | Closes the Meetup+ step-up paywall Activity before it renders, blocking every popup that routes through it (RSVP, messaging, attendees, waitlist, group members, profile). |  |

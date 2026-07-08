@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-07-08T16:10:00Z",
-  "description": "34 patches across FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass and universal OneTrust consent-banner auto-reject. v1.0.2 adds the universal OneTrust banner suppression (persists 'Banner - Reject All' and no-ops the setupUI render path so the popup can't slip through on relaunch) and Tinder's in-house TCF consent-prompt suppression; supersedes the Meetup-only cookie-banner patch. Purchase-breaking Tinder paywall patches and the native-PairIP-blocked X (12.4.1) patches are default-off.",
-  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.0.2/patches-1.0.2.mpp",
+  "created_at": "2026-07-08T17:30:00Z",
+  "description": "37 patches across FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass and universal OneTrust consent-banner auto-reject. v1.0.3 adds a Meetup patch to remove the 'Powered by Rokt' third-party offer popups (mParticle RoktKit.execute), and two default-off umbrella toggles ('Disable all Tinder paywalls & ads', 'Disable all Meetup paywalls') that apply every safe monetization patch from a single selection. Purchase-breaking Tinder paywall patches, the umbrellas, and the native-PairIP-blocked X (12.4.1) patches are default-off.",
+  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.0.3/patches-1.0.3.mpp",
   "signature_download_url": "",
-  "version": "1.0.2"
+  "version": "1.0.3"
 }

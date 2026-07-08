@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "patches": [
     {
       "name": "Auto-reject OneTrust consent banner",
@@ -279,6 +279,32 @@
       "options": []
     },
     {
+      "name": "Disable Rokt partner offers",
+      "description": "Removes the 'Powered by Rokt' third-party offer popups (e.g. the post-signup Disney+ interstitial) by no-oping the mParticle RoktKit.execute funnel so no Rokt placement renders.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.meetup",
+          "name": "Meetup",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#ED1C40",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2026.04.10.2881",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Disable Secret Admirer upsell",
       "description": "Suppresses the Secret Admirer (Gold) upsell popup.",
       "default": true,
@@ -308,6 +334,58 @@
       "name": "Disable ads-bouncer rewarded-video paywall",
       "description": "Suppresses the \"Watch an ad to keep swiping\" rewarded-video bottom sheet shown when out of likes.",
       "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.tinder",
+          "name": "Tinder",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#FD5564",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "17.15.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable all Meetup paywalls",
+      "description": "Single toggle that applies every Meetup+ paywall patch at once (intro, step-up, MemberSub, profile, trial panels, unprompted, and attendees paywall panels). Default-off: enable this on its own instead of the individual patches, not alongside them.",
+      "default": false,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.meetup",
+          "name": "Meetup",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#ED1C40",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "2026.04.10.2881",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable all Tinder paywalls & ads",
+      "description": "Single toggle that applies every safe Tinder ad/upsell patch at once (Boost, MyLikes, Platinum Likes, Primetime, Secret Admirer, headless purchase, Likes You Gold, rewarded video, ads-bouncer paywall, and both swipe-stack ad injectors). Default-off: enable this on its own instead of the individual patches, not alongside them. Excludes the purchase-breaking generic paywall patches.",
+      "default": false,
       "dependencies": [],
       "compatiblePackages": [
         {
