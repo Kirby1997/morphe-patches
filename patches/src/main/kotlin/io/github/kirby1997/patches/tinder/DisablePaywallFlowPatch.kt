@@ -22,7 +22,7 @@ object LaunchPaywallFlowInvokeFingerprint : Fingerprint(
 val disablePaywallFlowPatch = bytecodePatch(
     name = "Disable paywall flow",
     description = "Short-circuits the central LaunchPaywallFlow entry. Suppresses every paywall routed through paywallflow but also disables legitimate purchase flows.",
-    default = false,
+    default = true,
 ) {
     compatibleWith(Constants.TINDER)
 

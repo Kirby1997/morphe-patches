@@ -158,7 +158,7 @@ object DynamicPaywallOnCreateViewFingerprint : Fingerprint(
 val disableDynamicPaywallPatch = bytecodePatch(
     name = "Disable dynamic paywall sheet",
     description = "Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts.",
-    default = false,
+    default = true,
 ) {
     compatibleWith(Constants.TINDER)
 
