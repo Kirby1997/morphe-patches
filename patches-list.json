@@ -1,7 +1,25 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "patches": [
+    {
+      "name": "Allow user certificates (MITM)",
+      "description": "Makes the app trust user-installed CA certificates so an intercepting proxy (Burp/mitmproxy) can read its HTTPS traffic on an unrooted device. Overwrites any existing network security config to trust system + user CAs and permit cleartext. For inspecting your own app/account traffic; does not defeat certificate pinning (see the pinning-bypass patch).",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": null,
+      "options": [
+        {
+          "key": "makeDebuggable",
+          "title": null,
+          "description": "Also set android:debuggable=\"true\" (enables adb run-as disk access). Leave off unless you need it — some apps detect debuggable builds.",
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        }
+      ]
+    },
     {
       "name": "Auto-reject OneTrust consent banner",
       "description": "Universally suppresses the OneTrust cookie/TCF consent banner in any app that bundles OneTrust. Persists a real 'Banner - Reject All' decision so non-essential tracking is rejected, and no-ops the setupUI render path so the banner never appears on any launch.",
@@ -34,6 +52,14 @@
           ]
         }
       ],
+      "options": []
+    },
+    {
+      "name": "Bypass certificate pinning",
+      "description": "No-ops OkHttp's CertificatePinner so pinned hosts accept an intercepting proxy's certificate. Covers the common Java/OkHttp case (class Lokhttp3/CertificatePinner;). Does not defeat native/NDK pinning (Flutter, BoringSSL) or OkHttp shaded to a non-okhttp3 package.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": null,
       "options": []
     },
     {
@@ -463,7 +489,7 @@
     {
       "name": "Disable dynamic paywall sheet",
       "description": "Suppresses the generic server-driven paywall sheet (PaywallDialogFragment) that LaunchPaywallFlow renders for most upgrade prompts.",
-      "default": false,
+      "default": true,
       "dependencies": [],
       "compatiblePackages": [
         {
@@ -619,7 +645,7 @@
     {
       "name": "Disable paywall flow",
       "description": "Short-circuits the central LaunchPaywallFlow entry. Suppresses every paywall routed through paywallflow but also disables legitimate purchase flows.",
-      "default": false,
+      "default": true,
       "dependencies": [],
       "compatiblePackages": [
         {
