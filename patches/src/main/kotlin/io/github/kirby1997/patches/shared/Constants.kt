@@ -16,6 +16,14 @@ object Constants {
         targets = listOf(AppTarget(version = "4.8.5")),
     )
 
+    val FEELD = Compatibility(
+        name = "Feeld",
+        packageName = "co.feeld",
+        apkFileType = ApkFileType.APK,
+        appIconColor = 0x151515,
+        targets = listOf(AppTarget(version = "9.7.0")),
+    )
+
     val HIDRATESPARK = Compatibility(
         name = "Hidrate Spark",
         packageName = "hidratenow.com.hidrate.hidrateandroid",
