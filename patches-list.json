@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "patches": [
     {
       "name": "Allow user certificates (MITM)",
@@ -26,6 +26,32 @@
       "default": true,
       "dependencies": [],
       "compatiblePackages": null,
+      "options": []
+    },
+    {
+      "name": "Block tracking hosts (okhttp)",
+      "description": "Drops any okhttp request to known analytics/tracking hosts (Amplitude, AppsFlyer, Braze, Facebook app-events) with an IOException, before a connection is opened. Covers JS-fetch trackers that bypass the native-SDK kills.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "co.feeld",
+          "name": "Feeld",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#151515",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "9.7.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
       "options": []
     },
     {
@@ -115,6 +141,32 @@
       "options": []
     },
     {
+      "name": "Disable AppsFlyer tracking",
+      "description": "Stops the AppsFlyer SDK from starting, so it never uploads launches, installs, or attribution events to *.appsflyer.com / appsflyersdk.com.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "co.feeld",
+          "name": "Feeld",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#151515",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "9.7.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Disable Boost upsell",
       "description": "Suppresses the standard Boost upsell popup (\"Get Tinder Plus / Gold / Platinum\" prompt that surfaces when out of Boosts).",
       "default": true,
@@ -130,6 +182,32 @@
           "targets": [
             {
               "version": "17.15.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable Braze tracking",
+      "description": "Short-circuits the Braze network executor so no analytics/session data is ever POSTed to *.braze.eu; Braze treats it as a transient network failure.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "co.feeld",
+          "name": "Feeld",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#151515",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "9.7.0",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -954,6 +1032,32 @@
           "targets": [
             {
               "version": "2026.04.10.2881",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Unblur profile photos",
+      "description": "Neutralises the expo-image blur Feeld applies to gated profile photos so the underlying image renders sharp. Only affects photos whose pixels reach the device; server-hidden photos and the hidden bio are unaffected.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "co.feeld",
+          "name": "Feeld",
+          "description": null,
+          "apkFileType": "APK",
+          "appIconColor": "#151515",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "9.7.0",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

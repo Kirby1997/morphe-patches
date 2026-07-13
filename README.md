@@ -11,7 +11,25 @@ TODO: Update this about section with a brief introduction/summary about this rep
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.3](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.0.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;37 patches total
+> **[v1.2.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;43 patches total
+<details open>
+<summary>📦 Feeld&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<br>
+
+**🎯 Supported versions:**
+
+| 9.7.0 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Block tracking hosts (okhttp)](#block-tracking-hosts-okhttp) | Drops any okhttp request to known analytics/tracking hosts (Amplitude, AppsFlyer, Braze, Facebook app-events) with an IOException, before a connection is opened. Covers JS-fetch trackers that bypass the native-SDK kills. |  |
+| [Disable AppsFlyer tracking](#disable-appsflyer-tracking) | Stops the AppsFlyer SDK from starting, so it never uploads launches, installs, or attribution events to *.appsflyer.com / appsflyersdk.com. |  |
+| [Disable Braze tracking](#disable-braze-tracking) | Short-circuits the Braze network executor so no analytics/session data is ever POSTed to *.braze.eu; Braze treats it as a transient network failure. |  |
+| [Unblur profile photos](#unblur-profile-photos) | Neutralises the expo-image blur Feeld applies to gated profile photos so the underlying image renders sharp. Only affects photos whose pixels reach the device; server-hidden photos and the hidden bio are unaffected. |  |
+
+</details>
+
 <details open>
 <summary>📦 X&nbsp;&nbsp;•&nbsp;&nbsp;3 patches</summary>
 <br>
@@ -132,12 +150,14 @@ TODO: Update this about section with a brief introduction/summary about this rep
 </details>
 
 <details open>
-<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<summary>🌐 Universal&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
 <br>
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
+| [Allow user certificates (MITM)](#allow-user-certificates-mitm) | Makes the app trust user-installed CA certificates so an intercepting proxy (Burp/mitmproxy) can read its HTTPS traffic on an unrooted device. Overwrites any existing network security config to trust system + user CAs and permit cleartext. For inspecting your own app/account traffic; does not defeat certificate pinning (see the pinning-bypass patch). | • makeDebuggable |
 | [Auto-reject OneTrust consent banner](#auto-reject-onetrust-consent-banner) | Universally suppresses the OneTrust cookie/TCF consent banner in any app that bundles OneTrust. Persists a real 'Banner - Reject All' decision so non-essential tracking is rejected, and no-ops the setupUI render path so the banner never appears on any launch. |  |
+| [Bypass certificate pinning](#bypass-certificate-pinning) | No-ops OkHttp's CertificatePinner so pinned hosts accept an intercepting proxy's certificate. Covers the common Java/OkHttp case (class Lokhttp3/CertificatePinner;). Does not defeat native/NDK pinning (Flutter, BoringSSL) or OkHttp shaded to a non-okhttp3 package. |  |
 | [Disable PairIP license check](#disable-pairip-license-check) | Universally bypasses Google Play PairIP's license verification (the Play-ownership gate that blocks sideloaded installs). Applies to any PairIP-licensed app; does not defeat PairIP's native VM/integrity layer. |  |
 
 </details>
