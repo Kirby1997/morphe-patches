@@ -11,21 +11,25 @@ TODO: Update this about section with a brief introduction/summary about this rep
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;43 patches total
+> **[v1.3.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.3.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;47 patches total
 <details open>
-<summary>📦 Feeld&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<summary>📦 Feeld&nbsp;&nbsp;•&nbsp;&nbsp;8 patches</summary>
 <br>
 
 **🎯 Supported versions:**
 
-| 9.7.0 |
+| 9.10.0 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Block tracking hosts (okhttp)](#block-tracking-hosts-okhttp) | Drops any okhttp request to known analytics/tracking hosts (Amplitude, AppsFlyer, Braze, Facebook app-events) with an IOException, before a connection is opened. Covers JS-fetch trackers that bypass the native-SDK kills. |  |
+| [Bypass forced update (spoof app version)](#bypass-forced-update-spoof-app-version) | Reports a very high app version (99.0.0) from react-native-device-info so Feeld's "version not supported" force-update wall never triggers. Overrides versionName at its native source, covering both the appVersion constant and the x-app-version header; buildNumber is unchanged. |  |
+| [Disable Adapty tracking](#disable-adapty-tracking) | Stops the Adapty subscription SDK from opening any connection (it uses java.net, bypassing the okhttp block), killing its device-fingerprinting analytics and the ipify IP lookup. Adapty treats it as a network failure. May affect subscription entitlement sync for paying users. |  |
 | [Disable AppsFlyer tracking](#disable-appsflyer-tracking) | Stops the AppsFlyer SDK from starting, so it never uploads launches, installs, or attribution events to *.appsflyer.com / appsflyersdk.com. |  |
 | [Disable Braze tracking](#disable-braze-tracking) | Short-circuits the Braze network executor so no analytics/session data is ever POSTed to *.braze.eu; Braze treats it as a transient network failure. |  |
+| [Disable Facebook tracking](#disable-facebook-tracking) | Stops Facebook's GraphRequest transport from opening any connection (it uses java.net, bypassing the okhttp block), killing app-events (/activities) and gatekeeper (/mobile_sdk_gk) calls to graph.facebook.com. Also breaks 'Continue with Facebook' login. |  |
+| [Disable Sentry telemetry](#disable-sentry-telemetry) | Short-circuits the Sentry HTTP transport so no crash reports, performance traces, or Session Replay recordings are uploaded to *.ingest.sentry.io. Returns Sentry's own SUCCESS result so the event is silently dropped with no retries. |  |
 | [Unblur profile photos](#unblur-profile-photos) | Neutralises the expo-image blur Feeld applies to gated profile photos so the underlying image renders sharp. Only affects photos whose pixels reach the device; server-hidden photos and the hidden bio are unaffected. |  |
 
 </details>
