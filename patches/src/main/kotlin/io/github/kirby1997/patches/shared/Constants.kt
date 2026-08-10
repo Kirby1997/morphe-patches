@@ -21,7 +21,7 @@ object Constants {
         packageName = "co.feeld",
         apkFileType = ApkFileType.APK,
         appIconColor = 0x151515,
-        targets = listOf(AppTarget(version = "9.7.0")),
+        targets = listOf(AppTarget(version = "9.10.0")),
     )
 
     val HIDRATESPARK = Compatibility(
