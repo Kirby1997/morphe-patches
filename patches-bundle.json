@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-08-20T10:47:17",
-  "description": "47 patches across Feeld, FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass, universal OneTrust consent-banner auto-reject, and universal MITM patches (trust user CAs + bypass OkHttp pinning). For X 12.7.1-release.0 use 'Show age-restricted and sensitive media': it clears the blurred cover over age-restricted posts (the 'verify your age' interstitial) as well as the ordinary sensitive-media cover, complementing Piko's 'Show sensitive media' which leaves the age-verification variant in place. v1.4.1 removes the superseded 12.4.1 blur patch. The remaining X patches ('Bypass PairIP integrity', 'Remove promoted timeline items') are still pinned to 12.4.1 and default-off. Purchase-breaking Tinder paywall patches and the umbrellas are default-off too.",
-  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.4.1/patches-1.4.1.mpp",
+  "created_at": "2026-08-20T10:58:25",
+  "description": "47 patches across Feeld, FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass, universal OneTrust consent-banner auto-reject, and universal MITM patches (trust user CAs + bypass OkHttp pinning). For X 12.7.1-release.0 use 'Show age-restricted and sensitive media': it clears the blurred cover over age-restricted posts (the 'verify your age' interstitial) as well as the ordinary sensitive-media cover, complementing Piko's 'Show sensitive media' which leaves the age-verification variant in place. v1.4.2 retargets that patch to the narrow tweetview predicate (com.twitter.tweetview.core.l.a) after the earlier media-visibility chokepoint turned out to strip the media entirely. The remaining X patches ('Bypass PairIP integrity', 'Remove promoted timeline items') are still pinned to 12.4.1 and default-off. Purchase-breaking Tinder paywall patches and the umbrellas are default-off too.",
+  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.4.2/patches-1.4.2.mpp",
   "signature_download_url": "",
-  "version": "1.4.1"
+  "version": "1.4.2"
 }
