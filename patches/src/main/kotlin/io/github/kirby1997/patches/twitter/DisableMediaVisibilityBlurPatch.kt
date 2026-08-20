@@ -6,58 +6,66 @@ import app.morphe.patcher.patch.bytecodePatch
 import com.android.tools.smali.dexlib2.AccessFlags
 import io.github.kirby1997.patches.shared.Constants
 
-// X 12.7.1 covers restricted media with SensitiveMediaBlurPreviewInterstitialView, used
-// for both the ordinary "sensitive media" cover and the age-restricted "verify your age"
-// cover. Which one is drawn is decided in the binder by reading
-// BlurredImageInterstitial.e (com.twitter.model.mediavisibility.c): when it equals
-// c.AgeVerificationPrompt the button is labelled for age verification. Piko's
-// "Show sensitive media" works on a different, account-settings-level surface and
-// leaves the age-verification cover in place.
+// X 12.7.1 attaches a MediaVisibilityResults object (com.twitter.model.mediavisibility.g,
+// stored on the tweet as com.twitter.model.core.e.B) to any post whose media is covered.
+// It carries a MediaInterstitial (g.a) and/or a BlurredImageInterstitial (g.b); the latter
+// names the prompt variant in its field e, where c.AgeVerificationPrompt is the
+// age-restricted "verify your age" cover and the other values are the ordinary
+// sensitive-media cover.
 //
-// Whether the cover is shown at all comes from this tweetview state predicate:
+// Two earlier attempts patched predicates, and both failed the same way - the cover
+// disappeared but the media went with it:
 //
-//   com.twitter.tweetview.core.l.a(a0, i, a0) : Z          (12.4.1's k.a(t, i, x))
+//   com.twitter.model.mediavisibility.d.a(g)      also backs e.J0(), which a dozen
+//                                                 unrelated call sites consult
+//   com.twitter.tweetview.core.l.a(a0, i, a0)     only hides the interstitial View;
+//                                                 the media stays hidden underneath
 //
-// It resolves the tweet's sensitive-media state and returns true only for f$a.
-// SensitiveMediaBlurPreviewInterstitialViewDelegateBinder.d(...) calls it first: false
-// takes the early branch that binds the media entity and sets the interstitial View
-// GONE, which leaves the media underneath rendering normally.
+// The reason is com.twitter.tweetview.core.o.a(e, Z, a0$a), which decides whether the
+// content host renders the media at all. It does not go through either predicate - it
+// reads e.B and g.b directly. So does QuoteView.k. Blinding the predicates leaves those
+// reads intact, and the media host keeps the media hidden while the cover that used to
+// stand in for it is gone.
 //
-// Deliberately NOT patched: com.twitter.model.mediavisibility.d.a(g), the lower helper
-// this predicate calls. It looks like the cleaner chokepoint but it also backs
-// com.twitter.model.core.e.J0(), which a dozen unrelated call sites consult (timeline
-// binding, QuoteView, tweet actions). Forcing it false makes the media flash
-// uncensored and then disappear entirely - the surrounding pipeline stops treating the
-// post as carrying media at all. Patch the narrow tweetview predicate instead: three
-// call sites, all of them cover-related.
-object SensitiveMediaInterstitialStateFingerprint : Fingerprint(
-    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
-    returnType = "Z",
-    parameters = listOf(
-        "Lcom/twitter/tweetview/core/a0;",
-        "Lcom/twitter/ui/renderable/i;",
-        "Lcom/twitter/account/model/a0;",
-    ),
-    definingClass = "Lcom/twitter/tweetview/core/l;",
-    name = "a",
+// Kill it at the model layer instead, which is where Piko's "Show sensitive media"
+// operates too (it rewrites JsonSensitiveMediaWarning at parse time). LoganSquare builds
+// the model in JsonMediaVisibilityResults.r():
+//
+//   new g(this.a, this.b)
+//
+// Returning null there means no tweet ever carries media-visibility results. e.B stays
+// null, which is the normal state for unrestricted posts, so every consumer - o.a,
+// e.J0(), l.a, QuoteView.k, the interstitial binder - takes its ordinary path and the
+// media renders directly.
+//
+// The media itself is delivered either way: the interstitial binder loads the same media
+// entity into SensitiveMediaBlurPreviewInterstitialView.t(...) to draw its blurred
+// preview, so nothing is being withheld server-side that this reveals.
+object JsonMediaVisibilityResultsToModelFingerprint : Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
+    returnType = "Ljava/lang/Object;",
+    parameters = listOf(),
+    definingClass = "Lcom/twitter/model/json/mediavisibility/JsonMediaVisibilityResults;",
+    name = "r",
 )
 
 @Suppress("unused")
 val disableMediaVisibilityBlurPatch = bytecodePatch(
     name = "Show age-restricted and sensitive media",
-    description = "Removes the blurred cover over age-restricted media (the \"verify your age\" " +
-        "interstitial) as well as the ordinary sensitive-media cover, so the media underneath renders " +
-        "directly. Complements Piko's \"Show sensitive media\", which does not cover the age-verification variant.",
+    description = "Drops the media-visibility results X attaches to covered posts, so neither the " +
+        "age-restricted \"verify your age\" cover nor the ordinary sensitive-media cover is ever built " +
+        "and the media renders directly. Complements Piko's \"Show sensitive media\", which handles the " +
+        "older sensitive-media warning but not the age-verification variant.",
 ) {
     compatibleWith(Constants.TWITTER_12_7_1)
 
     execute {
-        // .registers 4 with three parameters, so v0 is a local - safe to write.
-        SensitiveMediaInterstitialStateFingerprint.method.addInstructions(
+        // .registers 4 with no parameters, so v0 is a local - safe to write.
+        JsonMediaVisibilityResultsToModelFingerprint.method.addInstructions(
             0,
             """
                 const/4 v0, 0x0
-                return v0
+                return-object v0
             """,
         )
     }
