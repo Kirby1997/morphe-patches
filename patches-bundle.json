@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-08-20T10:18:37",
-  "description": "47 patches across Feeld, FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass, universal OneTrust consent-banner auto-reject, and universal MITM patches (trust user CAs + bypass OkHttp pinning). v1.3.2 fixes on-device loading: the bundle now ships classes.dex, so Morphe Manager lists all 47 patches instead of 0 (no patch logic changed since v1.3.0). Feeld (co.feeld) targets 9.10.0 with \"Bypass forced update (spoof app version)\", \"Disable Adapty tracking\", \"Disable Sentry telemetry\", \"Disable Facebook tracking\", \"Disable AppsFlyer tracking\", \"Disable Braze tracking\", \"Block tracking hosts (okhttp)\" and \"Unblur profile photos\". Purchase-breaking Tinder paywall patches, the umbrellas, and the native-PairIP-blocked X (12.4.1) patches are default-off.",
-  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.3.2/patches-1.3.2.mpp",
+  "created_at": "2026-08-20T10:41:54",
+  "description": "48 patches across Feeld, FolderSync, Hidrate Spark, Meetup, Met Office, Tinder, and X, plus universal PairIP license-check bypass, universal OneTrust consent-banner auto-reject, and universal MITM patches (trust user CAs + bypass OkHttp pinning). v1.4.0 adds 'Show age-restricted and sensitive media' for X 12.7.1-release.0: it clears the blurred cover over age-restricted posts (the 'verify your age' interstitial) as well as the ordinary sensitive-media cover, by forcing X's single media-visibility predicate to report no blur interstitial. Complements Piko's 'Show sensitive media', which leaves the age-verification variant in place. The older X patches remain pinned to 12.4.1 and default-off. Purchase-breaking Tinder paywall patches and the umbrellas are also default-off.",
+  "download_url": "https://github.com/Kirby1997/morphe-patches/releases/download/v1.4.0/patches-1.4.0.mpp",
   "signature_download_url": "",
-  "version": "1.3.2"
+  "version": "1.4.0"
 }

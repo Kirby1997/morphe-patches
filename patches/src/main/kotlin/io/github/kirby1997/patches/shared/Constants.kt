@@ -67,4 +67,15 @@ object Constants {
         appIconColor = 0x000000,
         targets = listOf(AppTarget(version = "12.4.1-release.0", isExperimental = true)),
     )
+
+    // X 12.7.1 is the build Piko 3.8.0 targets and the one that actually runs
+    // patched on an unrooted device. Kept separate from [TWITTER] so the older
+    // 12.4.1-pinned RE artifacts are not offered for a build they cannot match.
+    val TWITTER_12_7_1 = Compatibility(
+        name = "X",
+        packageName = "com.twitter.android",
+        apkFileType = ApkFileType.APKM,
+        appIconColor = 0x000000,
+        targets = listOf(AppTarget(version = "12.7.1-release.0")),
+    )
 }
