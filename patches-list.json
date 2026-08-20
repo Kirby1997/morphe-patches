@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "patches": [
     {
       "name": "Allow user certificates (MITM)",
@@ -116,7 +116,7 @@
     },
     {
       "name": "Bypass version deprecation notice",
-      "description": "Reports a newer app version to X, so the server stops serving the full-screen \"This app is out of date\" gate that cannot be dismissed. Rewrites the hardcoded version constant in the X-Twitter-Client-Version header and in the app-config version getters.",
+      "description": "Reports a newer app version to X, so the server stops serving the full-screen \"This app is out of date\" gate that cannot be dismissed. Rewrites the hardcoded version constant in the X-Twitter-Client-Version header, the User-Agent, and the app-config version getters.",
       "default": true,
       "dependencies": [],
       "compatiblePackages": [

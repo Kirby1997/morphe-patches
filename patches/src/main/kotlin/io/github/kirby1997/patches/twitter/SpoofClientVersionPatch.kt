@@ -21,6 +21,8 @@ import io.github.kirby1997.patches.shared.Constants
 //                             com.x.common.api.a, the same config the force-update
 //                             checker reads)
 //   com.twitter.app.x.c.j()   the same constant, split on "-" to drop the release suffix
+//   com.twitter.network.r1.<init>  the User-Agent, which embeds the version inside a larger
+//                             literal: "TwitterAndroid" + "/12.7.1-release.0 (" + versionCode
 //
 // The "This app is out of date" screen is drawn from server-supplied copy - neither its
 // title nor its body exists anywhere in the APK's resources or dex - so it is issued in
@@ -48,6 +50,17 @@ object AppConfigVersionNameFingerprint : Fingerprint(
     name = "e",
 )
 
+object UserAgentBuilderFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf(
+        "Landroid/content/Context;",
+        "Lcom/twitter/util/telephony/g;",
+        "Lcom/twitter/util/android/q;",
+    ),
+    definingClass = "Lcom/twitter/network/r1;",
+    name = "<init>",
+)
+
 object AppConfigShortVersionFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
     returnType = "Ljava/lang/String;",
@@ -61,7 +74,7 @@ val spoofClientVersionPatch = bytecodePatch(
     name = "Bypass version deprecation notice",
     description = "Reports a newer app version to X, so the server stops serving the full-screen " +
         "\"This app is out of date\" gate that cannot be dismissed. Rewrites the hardcoded version " +
-        "constant in the X-Twitter-Client-Version header and in the app-config version getters.",
+        "constant in the X-Twitter-Client-Version header, the User-Agent, and the app-config version getters.",
 ) {
     compatibleWith(Constants.TWITTER_12_7_1)
 
@@ -77,25 +90,30 @@ val spoofClientVersionPatch = bytecodePatch(
     execute {
         val version = spoofedVersion ?: "12.99.0-release.0"
 
-        // Each site holds the version as a const-string; rewrite it in place and keep the
-        // original destination register, leaving the surrounding code untouched.
+        // Each site holds the version in a const-string, but not always alone - the
+        // User-Agent embeds it in "/12.7.1-release.0 (". Substitute within the literal and
+        // keep the original destination register, leaving the surrounding code untouched.
         fun Fingerprint.rewriteVersionConstant() {
             val patchedMethod = method
             patchedMethod.instructions
                 .withIndex()
                 .filter { (_, instruction) ->
                     (instruction.opcode == Opcode.CONST_STRING || instruction.opcode == Opcode.CONST_STRING_JUMBO) &&
-                        ((instruction as ReferenceInstruction).reference as StringReference).string == STOCK_VERSION
+                        ((instruction as ReferenceInstruction).reference as StringReference).string.contains(STOCK_VERSION)
                 }
                 // Rewrite back to front so earlier indexes stay valid.
                 .reversed()
                 .forEach { (index, instruction) ->
                     val register = (instruction as OneRegisterInstruction).registerA
-                    patchedMethod.replaceInstruction(index, "const-string v$register, \"$version\"")
+                    val literal = ((instruction as ReferenceInstruction).reference as StringReference)
+                        .string
+                        .replace(STOCK_VERSION, version)
+                    patchedMethod.replaceInstruction(index, "const-string v$register, \"$literal\"")
                 }
         }
 
         ClientVersionHeaderFingerprint.rewriteVersionConstant()
+        UserAgentBuilderFingerprint.rewriteVersionConstant()
         AppConfigVersionNameFingerprint.rewriteVersionConstant()
         AppConfigShortVersionFingerprint.rewriteVersionConstant()
     }
