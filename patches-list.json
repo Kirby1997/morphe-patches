@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.4.3",
+  "version": "1.5.0",
   "patches": [
     {
       "name": "Allow user certificates (MITM)",
@@ -113,6 +113,42 @@
         }
       ],
       "options": []
+    },
+    {
+      "name": "Bypass version deprecation notice",
+      "description": "Reports a newer app version to X, so the server stops serving the full-screen \"This app is out of date\" gate that cannot be dismissed. Rewrites the hardcoded version constant in the X-Twitter-Client-Version header and in the app-config version getters.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "X",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "12.7.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "spoofedVersion",
+          "title": "Spoofed app version",
+          "description": "The version string reported to X. Must keep X's <major>.<minor>.<patch>-release.<n> shape. Raise it if the deprecation gate returns.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "12.99.0-release.0",
+          "values": null
+        }
+      ]
     },
     {
       "name": "Disable AdMob banners",
