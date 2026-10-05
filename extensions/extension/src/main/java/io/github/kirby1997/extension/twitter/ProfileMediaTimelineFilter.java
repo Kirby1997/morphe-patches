@@ -3,12 +3,44 @@ package io.github.kirby1997.extension.twitter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Filters the profile Media tab response of X 12.7.1 before it is written to the timeline
- * database.
+ * Bypasses the empty profile Media tab that X 12.7.1 shows for sensitive/restricted content, by
+ * rebuilding it from a source the server does not withhold.
+ * <p>
+ * The Media tab is served by the {@code media_timeline_v2} operation (MediaTimelineV2,
+ * safety_level UserScopedTimeline). For an account whose media X treats as sensitive, the server
+ * returns that operation <em>empty</em> (the "@user hasn't posted media" state) whenever the
+ * viewer is not authorised for sensitive content - e.g. a viewer account that is itself
+ * age/region-restricted. The restriction is server-side and applies on every client (the web
+ * {@code UserPhotoTimeline} grid is empty for the same viewer too), so no amount of client-side
+ * "show sensitive media" unmasking can fill it: the media is never delivered to that operation.
+ * <p>
+ * The posts-and-replies timeline ({@code user_with_profile_tweets_and_replies_query_v2}, the
+ * operation the Replies tab uses) is <strong>not</strong> withheld the same way - the owner's own
+ * sensitive media still comes back on it. It carries the same variables (rest_id,
+ * includeTweetVisibilityNudge) and the same response path, so it can feed the Media tab instead.
+ * This patch therefore falls the Media tab back to posts-and-replies, trimmed to the owner's own
+ * posts that carry media, surfacing what the withheld media grid refuses to.
+ * <p>
+ * It is a <strong>fallback, not an unconditional swap</strong>: swapping every profile would wreck
+ * the normal case, because posts-and-replies is a far sparser media source than the server's media
+ * grid (a non-restricted account with hundreds of photos yields only a handful of own-media items
+ * per page). So {@link #operation} keeps requesting {@code media_timeline_v2} and only switches an
+ * owner to posts-and-replies once that owner's media timeline has actually come back empty
+ * ({@link #onProfileMediaResponse} records it). Profiles whose media grid loads normally are left
+ * completely untouched; a withheld profile needs one extra Media-tab load to fill in, and the set
+ * of fallback owners is process-lifetime only.
+ * <p>
+ * Reposts are excluded: the Media feed shows only the owner's own media, so entries whose resolved
+ * tweet is authored by someone else (reposts carry the original author) are dropped along with
+ * other people's posts. The posts-and-replies source is inherently limited - for an account that
+ * mostly reposts, its own-media count is genuinely low, and own media buried deep under reposts
+ * only appears as the viewer scrolls further pages.
  * <p>
  * Called from the top of {@code com.twitter.api.legacy.request.urt.t.a(z3, v2)}, the converter
  * every legacy URT response passes through on its way to the database. The argument is the
@@ -44,20 +76,94 @@ public final class ProfileMediaTimelineFilter {
     private static final int KEEP_OWN_MEDIA = 1;
     private static final int HIDE_GIF_REPLIES = 2;
 
+    /** Operation the Media tab falls back to once its {@code media_timeline_v2} came back empty. */
+    private static final String REPLIES_OPERATION = "user_with_profile_tweets_and_replies_query_v2";
+
+    /**
+     * Owner rest_ids whose {@code media_timeline_v2} returned no posts this session, so their
+     * Media tab should be served from the posts-and-replies timeline instead. Populated by
+     * {@link #onProfileMediaResponse}; read by {@link #operation}. Process-lifetime only.
+     */
+    private static final Set<Long> repliesFallbackOwners =
+            Collections.synchronizedSet(new HashSet<Long>());
+
     private ProfileMediaTimelineFilter() {
     }
 
     /**
-     * Keeps only the profile owner's own posts that carry media. Used when the Media tab is
-     * fed from the posts-and-replies timeline instead of the server's media timeline.
+     * Chooses the GraphQL operation for a profile Media tab request. Returns {@code mediaOperation}
+     * ({@code media_timeline_v2}) for every owner until one is recorded as having an empty media
+     * timeline, then returns {@link #REPLIES_OPERATION} for that owner. Called from the top of
+     * {@code com.twitter.api.legacy.request.urt.timelines.o.n0()} with the owner rest_id and the
+     * original operation string; any unexpected input falls back to the original operation.
      */
-    public static void keepOwnMedia(Object response) {
-        filter(response, KEEP_OWN_MEDIA);
+    public static String operation(long ownerId, String mediaOperation) {
+        try {
+            return repliesFallbackOwners.contains(ownerId) ? REPLIES_OPERATION : mediaOperation;
+        } catch (Throwable ignored) {
+            return mediaOperation;
+        }
     }
 
-    /** Drops replies whose media is an animated GIF. */
+    /**
+     * Handles a profile Media tab response. If the owner is already on the posts-and-replies
+     * fallback, trims the response to their own posts with media. Otherwise, if the server's
+     * {@code media_timeline_v2} came back with no posts (a withheld/sensitive media grid), records
+     * the owner so the next load of their Media tab uses the posts-and-replies source.
+     */
+    public static void onProfileMediaResponse(Object response) {
+        try {
+            Object timelineKey = get(get(response, "c"), "b");
+            if (((Number) get(timelineKey, "a")).intValue() != PROFILE_MEDIA_TIMELINE) return;
+
+            long ownerId = ((Number) get(timelineKey, "c")).longValue();
+            if (repliesFallbackOwners.contains(ownerId)) {
+                filter(response, KEEP_OWN_MEDIA);
+            } else if (!hasAnyPosts(response)) {
+                repliesFallbackOwners.add(ownerId);
+            }
+        } catch (Throwable ignored) {
+            // Unexpected shape: leave the response as the server sent it.
+        }
+    }
+
+    /**
+     * Drops replies whose media is an animated GIF. Only acts on owners served from the
+     * posts-and-replies fallback — the server's media timeline carries no reply GIFs to remove.
+     */
     public static void hideGifReplies(Object response) {
+        try {
+            Object timelineKey = get(get(response, "c"), "b");
+            if (((Number) get(timelineKey, "a")).intValue() != PROFILE_MEDIA_TIMELINE) return;
+            if (!repliesFallbackOwners.contains(((Number) get(timelineKey, "c")).longValue())) return;
+        } catch (Throwable ignored) {
+            return;
+        }
         filter(response, HIDE_GIF_REPLIES);
+    }
+
+    /** True if any AddEntries/AddToModule instruction carries at least one tweet item. */
+    private static boolean hasAnyPosts(Object response) throws Exception {
+        List<?> instructions = (List<?>) get(get(response, "b"), "b");
+        for (Object instruction : instructions) {
+            String type = instruction.getClass().getName();
+            if (ADD_ENTRIES.equals(type)) {
+                for (Object entry : (List<?>) get(instruction, "a")) {
+                    String entryType = entry.getClass().getName();
+                    if (TWEET_ENTRY.equals(entryType)) return true;
+                    if (MODULE_ENTRY.equals(entryType)) {
+                        for (Object item : (List<?>) get(entry, "e")) {
+                            if (TWEET_ENTRY.equals(item.getClass().getName())) return true;
+                        }
+                    }
+                }
+            } else if (ADD_TO_MODULE.equals(type)) {
+                for (Object item : (List<?>) get(instruction, "c")) {
+                    if (TWEET_ENTRY.equals(item.getClass().getName())) return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static void filter(Object response, int mode) {
@@ -81,12 +187,12 @@ public final class ProfileMediaTimelineFilter {
                 if (ADD_ENTRIES.equals(type)) {
                     List<?> entries = (List<?>) get(instruction, "a");
                     List<Object> kept = filterEntries(entries, context);
-                    if (kept != null) set(instruction, "a", kept);
+                    if (kept != null) replaceList(instruction, "a", entries, kept);
                 } else if (ADD_TO_MODULE.equals(type)) {
                     List<?> items = (List<?>) get(instruction, "c");
                     List<Object> kept = filterItems(items, context);
-                    if (kept != null) set(instruction, "c", kept);
-                } else if (PIN_ENTRY.equals(type) && !context.keepEntry(get(instruction, "a"))) {
+                    if (kept != null) replaceList(instruction, "c", items, kept);
+                } else if (PIN_ENTRY.equals(type) && !keepEntrySafe(context, get(instruction, "a"))) {
                     instructionsChanged = true;
                     continue;
                 }
@@ -94,27 +200,64 @@ public final class ProfileMediaTimelineFilter {
             }
 
             if (instructionsChanged) {
-                set(instructionHolder, "b", Collections.unmodifiableList(keptInstructions));
+                replaceList(instructionHolder, "b", instructions, keptInstructions);
             }
         } catch (Throwable ignored) {
             // Unexpected shape: show the response as the server sent it.
         }
     }
 
+    // Replace the contents of a list-typed field. The model's list fields are `final` (e.g.
+    // instructions.n.a), and on current ART a reflective set of a final instance field can silently
+    // no-op - leaving the original (unfiltered) list in place. So mutate the existing list object in
+    // place (clear + addAll) when it is mutable; only if that is rejected fall back to set().
+    private static void replaceList(Object owner, String field, List<?> current, List<Object> kept) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<Object> mutable = (List<Object>) current;
+            mutable.clear();
+            mutable.addAll(kept);
+            return;
+        } catch (Throwable inPlaceFailed) {
+            // Immutable list - fall through to replacing the reference.
+        }
+        try {
+            set(owner, field, kept);
+        } catch (Throwable ignored) {
+            // Could not write the filtered list - leave the response as the server sent it.
+        }
+    }
+
+    // Per-entry fail-open: a single malformed entry must not abort the whole filter (which would
+    // leak every repost). On any reflective error for one entry, keep that entry and move on.
+    private static boolean keepEntrySafe(Context context, Object entry) {
+        try {
+            return context.keepEntry(entry);
+        } catch (Throwable t) {
+            return true;
+        }
+    }
+
     /** Returns the filtered entries, or null when nothing was removed. */
-    private static List<Object> filterEntries(List<?> entries, Context context) throws Exception {
+    private static List<Object> filterEntries(List<?> entries, Context context) {
         List<Object> kept = new ArrayList<>(entries.size());
         for (Object entry : entries) {
-            if (context.keepEntry(entry)) kept.add(entry);
+            if (keepEntrySafe(context, entry)) kept.add(entry);
         }
         return kept.size() == entries.size() ? null : kept;
     }
 
     /** Filters module items, keeping every non-post item (cursors, headers, footers). */
-    private static List<Object> filterItems(List<?> items, Context context) throws Exception {
+    private static List<Object> filterItems(List<?> items, Context context) {
         List<Object> kept = new ArrayList<>(items.size());
         for (Object item : items) {
-            if (!TWEET_ENTRY.equals(item.getClass().getName()) || context.keepPost(item)) kept.add(item);
+            boolean keep;
+            try {
+                keep = !TWEET_ENTRY.equals(item.getClass().getName()) || context.keepPost(item);
+            } catch (Throwable t) {
+                keep = true;
+            }
+            if (keep) kept.add(item);
         }
         return kept.size() == items.size() ? null : kept;
     }
@@ -147,7 +290,7 @@ public final class ProfileMediaTimelineFilter {
             // A conversation or grid module with none of its posts left would render as an
             // empty shell, so drop the whole module.
             if (posts > 0 && keptPosts == 0) return false;
-            set(entry, "e", kept);
+            replaceList(entry, "e", items, kept);
             return true;
         }
 
