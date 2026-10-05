@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.9
+
+### Twitter / X
+
+- **"Bypass native certificate validation (X)" is now default-off**, as its v1.7.7 description
+  already stated. It was shipping default-on, which silently disabled X's native server-cert
+  validation for everyone who didn't untick it. Only select it to MITM-inspect your own traffic.
+
 ## 1.7.8
 
 ### Feeld (9.10.0)

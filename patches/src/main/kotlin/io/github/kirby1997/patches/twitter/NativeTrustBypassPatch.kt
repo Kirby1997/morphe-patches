@@ -34,6 +34,9 @@ val bypassNativeTrustManagerPatch = bytecodePatch(
         "intercepting proxy with a user-installed CA can read X's native API traffic. Pair with " +
         "the universal MITM patches (user certs + OkHttp pinning bypass). For inspecting your own " +
         "device's traffic; leave off for normal use.",
+    // Default-off: disables native server-cert validation, so it must never apply
+    // unless explicitly selected. Only wanted for MITM-inspecting your own traffic.
+    default = false,
 ) {
     compatibleWith(Constants.TWITTER_12_7_1)
 

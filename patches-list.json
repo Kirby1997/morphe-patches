@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.7.8",
+  "version": "1.7.9",
   "patches": [
     {
       "name": "Allow user certificates (MITM)",
@@ -117,7 +117,7 @@
     {
       "name": "Bypass native certificate validation (X)",
       "description": "Neutralises X's custom X509TrustManager (com.x.android.io.impl.d) so an intercepting proxy with a user-installed CA can read X's native API traffic. Pair with the universal MITM patches (user certs + OkHttp pinning bypass). For inspecting your own device's traffic; leave off for normal use.",
-      "default": true,
+      "default": false,
       "dependencies": [],
       "compatiblePackages": [
         {
