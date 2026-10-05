@@ -15,7 +15,7 @@ The X patches are meant to be applied alongside [Piko](https://github.com/crimer
 <!-- PATCHES_START EXPANDED -->
 > **[v1.6.0](https://github.com/Kirby1997/morphe-patches/releases/tag/v1.6.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;50 patches total
 <details open>
-<summary>📦 Feeld&nbsp;&nbsp;•&nbsp;&nbsp;8 patches</summary>
+<summary>📦 Feeld&nbsp;&nbsp;•&nbsp;&nbsp;7 patches</summary>
 <br>
 
 **🎯 Supported versions:**
@@ -32,7 +32,6 @@ The X patches are meant to be applied alongside [Piko](https://github.com/crimer
 | [Disable Braze tracking](#disable-braze-tracking) | Short-circuits the Braze network executor so no analytics/session data is ever POSTed to *.braze.eu; Braze treats it as a transient network failure. |  |
 | [Disable Facebook tracking](#disable-facebook-tracking) | Stops Facebook's GraphRequest transport from opening any connection (it uses java.net, bypassing the okhttp block), killing app-events (/activities) and gatekeeper (/mobile_sdk_gk) calls to graph.facebook.com. Also breaks 'Continue with Facebook' login. |  |
 | [Disable Sentry telemetry](#disable-sentry-telemetry) | Short-circuits the Sentry HTTP transport so no crash reports, performance traces, or Session Replay recordings are uploaded to *.ingest.sentry.io. Returns Sentry's own SUCCESS result so the event is silently dropped with no retries. |  |
-| [Unblur profile photos](#unblur-profile-photos) | Neutralises the expo-image blur Feeld applies to gated profile photos so the underlying image renders sharp. Only affects photos whose pixels reach the device; server-hidden photos and the hidden bio are unaffected. |  |
 
 </details>
 

@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.6.0",
+  "version": "1.7.8",
   "patches": [
     {
       "name": "Allow user certificates (MITM)",
@@ -104,6 +104,32 @@
           "targets": [
             {
               "version": "9.10.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Bypass native certificate validation (X)",
+      "description": "Neutralises X's custom X509TrustManager (com.x.android.io.impl.d) so an intercepting proxy with a user-installed CA can read X's native API traffic. Pair with the universal MITM patches (user certs + OkHttp pinning bypass). For inspecting your own device's traffic; leave off for normal use.",
+      "default": true,
+      "dependencies": [],
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "X",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "targets": [
+            {
+              "version": "12.7.1-release.0",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1184,7 +1210,7 @@
     },
     {
       "name": "Show media tab for sensitive profiles",
-      "description": "Rebuilds the profile Media tab from the account's posts and replies, keeping only their own posts with media. X returns an empty media timeline for accounts it flags as sensitive (\"@user hasn't posted media\"), even though the same posts load on the Posts and Replies tabs. Applies to every profile's Media tab, not only flagged ones.",
+      "description": "Bypasses the empty profile Media tab X shows for withheld sensitive media - the \"@user hasn't posted media\" state the server returns when the viewer is not authorised for sensitive content - by rebuilding the tab from the posts-and-replies timeline, which is not withheld, trimmed to the owner's own posts with media (reposts excluded). Only affected profiles are touched, and only after their empty media timeline is seen once; profiles whose media grid loads normally keep the server's full grid unchanged. The posts-and-replies source is sparser than the real grid, so an account that mostly reposts shows few own-media items and older media fills in as you scroll.",
       "default": true,
       "dependencies": [],
       "compatiblePackages": [
@@ -1224,32 +1250,6 @@
           "targets": [
             {
               "version": "2026.04.10.2881",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Unblur profile photos",
-      "description": "Neutralises the expo-image blur Feeld applies to gated profile photos so the underlying image renders sharp. Only affects photos whose pixels reach the device; server-hidden photos and the hidden bio are unaffected.",
-      "default": true,
-      "dependencies": [],
-      "compatiblePackages": [
-        {
-          "packageName": "co.feeld",
-          "name": "Feeld",
-          "description": null,
-          "apkFileType": "APK",
-          "appIconColor": "#151515",
-          "signatures": null,
-          "targets": [
-            {
-              "version": "9.10.0",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.8
+
+### Feeld (9.10.0)
+
+- **Removed "Unblur profile photos".** Nulling expo-image's `blurRadius` did not reveal gated
+  profile photos on-device, so the patch is dropped rather than shipped broken.
+
 ## 1.7.7
 
 ### Twitter / X (12.7.1)
